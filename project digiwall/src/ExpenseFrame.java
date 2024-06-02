@@ -105,6 +105,7 @@ public class ExpenseFrame extends JFrame {
                     savetoFileexpense();
                     clearFields();
                     loadExpenses();
+                    jLabel8.setText(Double.toString(BudgetManager.totalExpense()));
 
 
                 } catch (NumberFormatException e) {
@@ -186,8 +187,8 @@ public class ExpenseFrame extends JFrame {
 
         jLabel7.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Total Expense:-");
-
         jLabel8.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setText(Double.toString(BudgetManager.totalExpense()));
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(

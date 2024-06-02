@@ -1,7 +1,7 @@
 
     import java.util.*;
 
-    public class Income extends Transactions{
+    public class Income extends Transactions {
         private String Frequency;
 
         Income(String Frequency,double amount, String date, String description)

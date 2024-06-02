@@ -1,42 +1,35 @@
+import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.*;
-import com.toedter.calendar.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-public class IncomeFrame extends JFrame {
-    private JButton jButton3;
-    private JComboBox<String> jComboBox1;
-
+public class LoanFrame extends JFrame{
+    private JButton jButton3;;
     private JLabel jLabel1, jLabel2, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel3;
     private JPanel jPanel1, jPanel2, jPanel3;
     private JScrollPane jScrollPane1;
     private JTable jTable1;
     private JTextField jTextField1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser1,jDateChooser2;
     private JTextField textField1;
-    private List<Income> Incomes;
+    private List<Loan> Loans;
 
-    public IncomeFrame() {
-        Incomes = new ArrayList<>();
+    public LoanFrame() {
+        Loans = new ArrayList<>();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser1.setDate(new Date());
         jPanel1 = new JPanel();
         jPanel2 = new JPanel();
         jLabel1 = new JLabel();
         jLabel2 = new JLabel();
-        jComboBox1 = new JComboBox<>();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new JLabel();
         textField1 = new JTextField();
         jLabel5 = new JLabel();
@@ -57,16 +50,16 @@ public class IncomeFrame extends JFrame {
         jPanel2.setBackground(new Color(102, 204, 255));
 
         jLabel1.setFont(new Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("ADD INCOMES");
+        jLabel1.setText("ADD LOANS");
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
                 jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(224, 224, 224)
+                        .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(248, 248, 248))
         );
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -74,29 +67,32 @@ public class IncomeFrame extends JFrame {
         );
 
         jLabel2.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Frequency :-");
-        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"", "Daily", "Monthly", "Yearly"}));
+        jLabel2.setText("Loan Date :-");
+
         jLabel3.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Date:-");
+        jLabel3.setText("Return Date:-");
+
         textField1.setText("");
+
         jLabel5.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Amount:-");
 
         jLabel6.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Description :-");
+        jLabel6.setText("From:-");
 
         jTextField1.setText("");
+        jDateChooser2.setDate(new Date());
         jButton3.setText("Add");
         jButton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 try {
-                    addIncome(evt);
+                    addLoan(evt);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 clearFields();
-                loadIncomes();
-                jLabel8.setText(Double.toString(BudgetManager.totalIncome()));
+                loadLoans();
+                jLabel8.setText(Double.toString(BudgetManager.totalLoan()));
                 Repository.refresh();
             }
         });
@@ -112,42 +108,45 @@ public class IncomeFrame extends JFrame {
                                         .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                                 .addComponent(jLabel2)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                                                .addComponent(jDateChooser1, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(34, 34, 34)
                                                 .addComponent(jLabel5)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                                                 .addComponent(jLabel3)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jDateChooser1, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-                                                .addGap(21, 21, 21))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jDateChooser2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(33, 33, 33))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jButton3)
-                                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel6)
-                                                                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 574, GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(jButton3)
+                                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 605, GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+                                                        .addComponent(jLabel6))
                                                 .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(jDateChooser1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
                                                                 .addComponent(jLabel2)
-                                                                .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(textField1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                                                                .addGap(3, 3, 3))
+                                                        .addComponent(jDateChooser1, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel5, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(textField1, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jDateChooser2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel6)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton3, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
@@ -157,22 +156,26 @@ public class IncomeFrame extends JFrame {
         jPanel3.setBackground(new Color(153, 255, 255));
 
         jTable1.setModel(new DefaultTableModel(
-                new Object[][]{
+                new Object [][] {
 
                 },
-                new String[]{
-                        "Frequency", "Date", "Description", "Amount"
+                new String [] {
+                        "From", "Loan Date", "Return Date", "Amount"
                 }
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel4.setFont(new Font("Segoe UI", 1, 14));
-        jLabel4.setText("Incomes: ");
-        jLabel7.setFont(new Font("Segoe UI", 1, 14));
-        jLabel7.setText("Total Income:-");
+        jLabel4.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setText("Expenses: ");
 
-        jLabel8.setFont(new Font("Segoe UI", 1, 14));
-        jLabel8.setText(Double.toString(BudgetManager.totalIncome()));
+        jLabel4.setFont(new Font("Segoe UI", 1, 14));
+        jLabel4.setText("Loans: ");
+        jLabel7.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setText("Total Loan:-");
+
+        jLabel8.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setText(Double.toString(BudgetManager.totalLoan()));
+
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -183,10 +186,12 @@ public class IncomeFrame extends JFrame {
                                         .addComponent(jScrollPane1)
                                         .addGroup(jPanel3Layout.createSequentialGroup()
                                                 .addComponent(jLabel4)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
                                                 .addComponent(jLabel7)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel8, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel8, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(98, 98, 98)))
                                 .addContainerGap())
         );
@@ -229,29 +234,27 @@ public class IncomeFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        loadIncomes();
+        loadLoans();
     }
 
-    private void addIncome(ActionEvent evt) {
+    private void addLoan(ActionEvent evt) {
         try {
-            String frequency = (String) jComboBox1.getSelectedItem();
+            Date gd = jDateChooser2.getDate();
             Date d= jDateChooser1.getDate();
             SimpleDateFormat dateform= new SimpleDateFormat("dd/MM/YY");
-            String date= dateform.format(d);
+            String loandate= dateform.format(gd);
+            String returnDate= dateform.format(d);
             String description = jTextField1.getText();
             String amountStr = textField1.getText();
 
-            if (frequency == null || frequency.isEmpty()) {
-                throw new IllegalArgumentException("Frequency is required.");
-            }
             double amount = Double.parseDouble(amountStr);
             if (amount <= 0) {
                 throw new IllegalArgumentException("Amount must be positive.");
             }
 
-            Income income = new Income(frequency, amount , date, description);
-            Incomes.add(income);
-            savetoFileIncome();
+            Loan Loan = new Loan(description, amount ,loandate, returnDate);
+            Loans.add(Loan);
+            savetoFileLoan();
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid amount. Please enter a numeric value.");
         } catch (IllegalArgumentException e) {
@@ -261,11 +264,11 @@ public class IncomeFrame extends JFrame {
         }
     }
 
-    public void savetoFileIncome()
+    public void savetoFileLoan()
     {
-        try(PrintWriter writer=new PrintWriter(new BufferedWriter(new FileWriter("Income.txt",true)))){
-            Income Income= Incomes.get(Incomes.size()-1);
-            writer.println(Income.getFrequency()+", "+Income.getDate()+", "+Income.getDescription()+", "+Income.getAmount());
+        try(PrintWriter writer=new PrintWriter(new BufferedWriter(new FileWriter("Loan.txt",true)))){
+            Loan Loan= Loans.get(Loans.size()-1);
+            writer.println(Loan.getDescription()+", "+Loan.getDate()+", "+Loan.getReturnDate()+", "+Loan.getAmount());
         }
         catch (IOException e)
         {
@@ -276,14 +279,14 @@ public class IncomeFrame extends JFrame {
     {
         jTextField1.setText("");
         textField1.setText("");
-        jComboBox1.setSelectedItem(1);
+        jDateChooser2.setDate(new Date());
         jDateChooser1.setDate(new Date());
     }
-    public void loadIncomes() {
+    public void loadLoans() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Clear existing data
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Income.txt"))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Loan.txt"))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(", ");
@@ -294,6 +297,3 @@ public class IncomeFrame extends JFrame {
         }
     }
 }
-
-
-

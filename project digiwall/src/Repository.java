@@ -1,11 +1,11 @@
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+
 public class Repository extends JFrame {
-    private JButton jButton1, jButton2;
+    private JButton jButton1, jButton2,jButton4;
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
@@ -14,8 +14,6 @@ public class Repository extends JFrame {
 
     public Repository()
     {
-
-
         jPanel1 = new JPanel();
         jButton1 = new JButton();
         jButton2 = new JButton();
@@ -23,9 +21,11 @@ public class Repository extends JFrame {
         jLabel2 = new JLabel();
         jLabel3 = new JLabel();
         jLabel4 = new JLabel();
+        jButton4 = new JButton();
         jPanel2 = new JPanel();
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new Color(102, 102, 255));
 
@@ -39,7 +39,7 @@ public class Repository extends JFrame {
         jButton2.setText("Expense");
         jButton2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                new ExpenseFrame();
+               new ExpenseFrame();
             }
         });
 
@@ -50,7 +50,14 @@ public class Repository extends JFrame {
 
         jLabel3.setText("Todays Budget:-");
 
-        jLabel4.setText("0");
+        jLabel4.setText(BudgetManager.Budget());
+
+        jButton4.setText("Loan");
+        jButton4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                new LoanFrame();
+            }
+        });
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -58,21 +65,19 @@ public class Repository extends JFrame {
                 jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel3, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(jLabel3, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addComponent(jLabel1)
-                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jLabel2)))
+                                                .addComponent(jLabel1)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(12, Short.MAX_VALUE))
+                                                .addComponent(jLabel2)))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -85,11 +90,13 @@ public class Repository extends JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel3)
                                         .addComponent(jLabel4))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap())
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
@@ -100,7 +107,7 @@ public class Repository extends JFrame {
         );
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 100, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -117,16 +124,19 @@ public class Repository extends JFrame {
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+    public static void refresh()
+    {
+        jLabel4.setText(BudgetManager.Budget());
     }
 }
 

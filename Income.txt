@@ -1,3 +1,5 @@
 Daily, 02/06/24, 2, 200.0
 Monthly, 02/06/24, 2, 2002.0
 Monthly, 02/06/24, 22, 22.0
+Monthly, 02/06/24, bhaia dey, 1800.0
+Monthly, 02/06/24, IUT, 5800.0
