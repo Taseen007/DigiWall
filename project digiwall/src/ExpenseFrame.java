@@ -19,7 +19,7 @@ public class ExpenseFrame extends JFrame {
     private JScrollPane jScrollPane1;
     private JTable jTable1;
     private JTextField jTextField1;
-    private JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private JTextField textField1;
     private List<Expense> expenses;
 
@@ -87,7 +87,9 @@ public class ExpenseFrame extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 try {
                     String category = (String) jComboBox1.getSelectedItem();
-                    Date date = jDateChooser1.getDate();
+                    Date d= jDateChooser1.getDate();
+                    SimpleDateFormat dateform= new SimpleDateFormat("dd/MM/YY");
+                    String date= dateform.format(d);
                     String description = jTextField1.getText();
                     double amount = Double.parseDouble(textField1.getText());
 
@@ -100,6 +102,10 @@ public class ExpenseFrame extends JFrame {
 
                     Expense expense = new Expense(category, amount, date, description);
                     expenses.add(expense);
+                    savetoFileexpense();
+                    clearFields();
+                    loadExpenses();
+
 
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Invalid amount. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -238,5 +244,36 @@ public class ExpenseFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        loadExpenses();
+    }
+    public void savetoFileexpense() {
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("Expense.txt", true)))) {
+            Expense expense = expenses.get(expenses.size() - 1);
+            writer.println(expense.getCatagory() + ", " + expense.getDate() + ", " + expense.getDescription() + ", " + expense.getAmount());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void clearFields() {
+        jTextField1.setText("");
+        textField1.setText("");
+        jDateChooser1.setDate(new Date());
+        jComboBox1.setSelectedItem(1);
+    }
+
+    public void loadExpenses() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clear existing data
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Expense.txt"))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split(", ");
+                model.addRow(data);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

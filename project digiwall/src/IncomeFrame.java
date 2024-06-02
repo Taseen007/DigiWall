@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
-
+import com.toedter.calendar.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -94,6 +94,8 @@ public class IncomeFrame extends JFrame {
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                clearFields();
+                loadIncomes();
             }
         });
 
@@ -224,22 +226,21 @@ public class IncomeFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        loadIncomes();
     }
 
     private void addIncome(ActionEvent evt) {
         try {
             String frequency = (String) jComboBox1.getSelectedItem();
-            Date date = jDateChooser1.getDate();
+            Date d= jDateChooser1.getDate();
+            SimpleDateFormat dateform= new SimpleDateFormat("dd/MM/YY");
+            String date= dateform.format(d);
             String description = jTextField1.getText();
             String amountStr = textField1.getText();
 
             if (frequency == null || frequency.isEmpty()) {
                 throw new IllegalArgumentException("Frequency is required.");
             }
-            if (date == null) {
-                throw new IllegalArgumentException("Date is required.");
-            }
-
             double amount = Double.parseDouble(amountStr);
             if (amount <= 0) {
                 throw new IllegalArgumentException("Amount must be positive.");
@@ -247,12 +248,7 @@ public class IncomeFrame extends JFrame {
 
             Income income = new Income(frequency, amount , date, description);
             Incomes.add(income);
-
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            model.addRow(new Object[]{frequency, sdf.format(date), description, amount});
-
-            updateTotalIncome();
+            savetoFileIncome();
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid amount. Please enter a numeric value.");
         } catch (IllegalArgumentException e) {
@@ -262,17 +258,37 @@ public class IncomeFrame extends JFrame {
         }
     }
 
-    private void updateTotalIncome() {
-        double total = Incomes.stream().mapToDouble(Income::getAmount).sum();
-        jLabel8.setText(String.format("%.2f", total));
+    public void savetoFileIncome()
+    {
+        try(PrintWriter writer=new PrintWriter(new BufferedWriter(new FileWriter("Income.txt",true)))){
+            Income Income= Incomes.get(Incomes.size()-1);
+            writer.println(Income.getFrequency()+", "+Income.getDate()+", "+Income.getDescription()+", "+Income.getAmount());
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
+    public void clearFields()
+    {
+        jTextField1.setText("");
+        textField1.setText("");
+        jComboBox1.setSelectedItem(1);
+        jDateChooser1.setDate(new Date());
+    }
+    public void loadIncomes() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clear existing data
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IncomeFrame().setVisible(true);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Income.txt"))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split(", ");
+                model.addRow(data);
             }
-        });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
