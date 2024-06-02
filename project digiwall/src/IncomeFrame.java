@@ -8,18 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
 
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class IncomeFrame extends JFrame {
     private JButton jButton3;
     private JComboBox<String> jComboBox1;
 
     private JLabel jLabel1, jLabel2, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel3;
     private JPanel jPanel1, jPanel2, jPanel3;
-    private JScrollPane jScrollPane1, jScrollPane2;
+    private JScrollPane jScrollPane1;
     private JTable jTable1;
     private JTextField jTextField1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private JTextField textField1;
-    private JTextPane jTextPane1;
     private List<Income> Incomes;
 
     public IncomeFrame() {
@@ -83,6 +89,11 @@ public class IncomeFrame extends JFrame {
         jButton3.setText("Add");
         jButton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
+                try {
+                    addIncome(evt);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -214,4 +225,56 @@ public class IncomeFrame extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
+    private void addIncome(ActionEvent evt) {
+        try {
+            String frequency = (String) jComboBox1.getSelectedItem();
+            Date date = jDateChooser1.getDate();
+            String description = jTextField1.getText();
+            String amountStr = textField1.getText();
+
+            if (frequency == null || frequency.isEmpty()) {
+                throw new IllegalArgumentException("Frequency is required.");
+            }
+            if (date == null) {
+                throw new IllegalArgumentException("Date is required.");
+            }
+
+            double amount = Double.parseDouble(amountStr);
+            if (amount <= 0) {
+                throw new IllegalArgumentException("Amount must be positive.");
+            }
+
+            Income income = new Income(frequency, amount , date, description);
+            Incomes.add(income);
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            model.addRow(new Object[]{frequency, sdf.format(date), description, amount});
+
+            updateTotalIncome();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid amount. Please enter a numeric value.");
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("An unexpected error occurred.", e);
+        }
+    }
+
+    private void updateTotalIncome() {
+        double total = Incomes.stream().mapToDouble(Income::getAmount).sum();
+        jLabel8.setText(String.format("%.2f", total));
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new IncomeFrame().setVisible(true);
+            }
+        });
+    }
 }
+
+
+

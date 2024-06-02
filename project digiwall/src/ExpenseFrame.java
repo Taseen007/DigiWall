@@ -85,7 +85,31 @@ public class ExpenseFrame extends JFrame {
         jButton3.setText("Add");
         jButton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
+                try {
+                    String category = (String) jComboBox1.getSelectedItem();
+                    Date date = jDateChooser1.getDate();
+                    String description = jTextField1.getText();
+                    double amount = Double.parseDouble(textField1.getText());
+
+                    if (category == null || category.isEmpty()) {
+                        throw new IllegalArgumentException("Category cannot be empty");
+                    }
+                    if (description.isEmpty()) {
+                        throw new IllegalArgumentException("Description cannot be empty");
+                    }
+
+                    Expense expense = new Expense(category, amount, date, description);
+                    expenses.add(expense);
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid amount. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
+
         });
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
