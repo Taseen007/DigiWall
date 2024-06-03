@@ -24,7 +24,7 @@ public class Repository extends JFrame {
         jButton4 = new JButton();
         jPanel2 = new JPanel();
 
-
+        setTitle("DigiWall");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new Color(102, 102, 255));

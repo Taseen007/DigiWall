@@ -51,6 +51,7 @@ public class IncomeFrame extends JFrame {
         jLabel8 = new JLabel();
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setTitle("Incomes");
 
         jPanel1.setBackground(new Color(51, 153, 255));
 

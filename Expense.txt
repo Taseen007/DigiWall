@@ -1,2 +1,3 @@
 Clothes, 02/06/24, w, 100.0
 Travel, 03/06/24, ghurbo, 500.0
+Accessories, 03/06/24, iccha, 500.0

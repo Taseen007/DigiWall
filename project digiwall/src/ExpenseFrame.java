@@ -45,6 +45,7 @@ public class ExpenseFrame extends JFrame {
         jLabel7 = new JLabel();
         jLabel8 = new JLabel();
 
+        setTitle("Expenses");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new Color(51, 153, 255));
@@ -70,7 +71,7 @@ public class ExpenseFrame extends JFrame {
 
         jLabel2.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Category :-");
-        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"", "Food", "Clothes", "Accessories", "Travel", "Fees", "Study", "Miscellaneous"}));
+        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"", "Food", "Clothes", "Accessories", "Travel", "Fees", "Study", "Miscellaneous","Loan Return"}));
         jLabel3.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Date:-");
         textField1.setText("");
@@ -111,8 +112,7 @@ public class ExpenseFrame extends JFrame {
                     jLabel8.setText(Double.toString(BudgetManager.totalExpense()));
                     if(BudgetManager.TodaysExpense()>=Double.parseDouble(BudgetManager.Budget()))
                     {
-                        savetoFileexpense();
-                        throw new IllegalArgumentException("You Are Exceeding Your Budget, Spend Carefully");
+                        JOptionPane.showMessageDialog(new JFrame(),"You are exceeding Budget","Alert",JOptionPane.WARNING_MESSAGE);
                     }
 
                 } catch (NumberFormatException e) {
