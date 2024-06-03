@@ -110,6 +110,7 @@ public class ExpenseFrame extends JFrame {
                     clearFields();
                     loadExpenses();
                     jLabel8.setText(Double.toString(BudgetManager.totalExpense()));
+                    Repository.refresh();
                     if(BudgetManager.TodaysExpense()>=Double.parseDouble(BudgetManager.Budget()))
                     {
                         JOptionPane.showMessageDialog(new JFrame(),"You are exceeding Budget","Alert",JOptionPane.WARNING_MESSAGE);
