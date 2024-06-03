@@ -93,7 +93,8 @@ public class ExpenseFrame extends JFrame {
                     String date= dateform.format(d);
                     String description = jTextField1.getText();
                     double amount = Double.parseDouble(textField1.getText());
-                    if(BudgetManager.totalExpense()>(BudgetManager.totalIncome()+BudgetManager.totalLoan()))
+                    double x= BudgetManager.totalIncome()+BudgetManager.totalLoan();
+                    if(BudgetManager.totalExpense()>=(x))
                     {
                         throw new IllegalArgumentException("You Do Not Have Sufficient Balance");
                     }
